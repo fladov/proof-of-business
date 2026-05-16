@@ -2,7 +2,7 @@
 {% block content %}
 <header class="flex items-center justify-between border-b border-slate-200/70 py-4 dark:border-white/10">
   <a href="/" class="flex items-center gap-3">
-    <img src="{{ request.url_for('static', path='logo.svg') }}" alt="PoB logo" class="h-10 w-10 rounded-xl border border-brand-200/80 bg-brand-600 object-cover dark:border-brand-400/20" />
+    <img src="{{ request.url_for('static', path='logo.jpg') }}" alt="PoB logo" class="h-10 w-10 rounded-xl border border-brand-200/80 bg-brand-600 object-cover dark:border-brand-400/20" />
     <div>
       <p class="font-display text-lg font-bold tracking-tight text-slate-950 dark:text-white">Proof of Business by Fladov</p>
       <p class="text-sm text-slate-500 dark:text-slate-400">Turn Fladov activity into a public credibility passport</p>
@@ -23,14 +23,14 @@
   <div class="grid w-full gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(400px,480px)] lg:items-start">
     <section class="space-y-7">
       <div class="inline-flex items-center gap-2 rounded-lg border border-brand-200/70 bg-brand-50 px-4 py-2 text-sm font-medium text-brand-700 dark:border-brand-400/20 dark:bg-brand-500/10 dark:text-brand-200">
-        <img src="{{ request.url_for('static', path='logo.svg') }}" alt="" aria-hidden="true" class="h-5 w-5 rounded-md object-cover" />
+        <img src="{{ request.url_for('static', path='logo.jpg') }}" alt="" aria-hidden="true" class="h-5 w-5 rounded-md object-cover" />
         <span class="inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
         Fladov-native credibility passports
       </div>
 
       <div class="max-w-3xl space-y-5">
         <h1 class="font-display text-4xl font-bold leading-tight tracking-tight text-slate-950 sm:text-5xl dark:text-white">
-          Proof of Business by Fladov helps real businesses prove credibility from the activity they already record on Fladov.
+          Proof of Business by Fladov helps real businesses prove credibility from their recorded activity.
         </h1>
         <p class="max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
           PoB analyzes Fladov records such as orders, purchases, cashbook entries, transaction documents, operation logs, reviews, and verified payments to generate privacy-safe credibility scores.
