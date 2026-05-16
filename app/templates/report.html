@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/70 py-4 dark:border-white/10">
+  <div class="min-w-0">
+    <a href="/" class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-300">
+      <span aria-hidden="true">&#8592;</span>
+      <span>Back to generator</span>
+    </a>
+    <div class="mt-3 flex items-center gap-3">
+      <img src="{{ request.url_for('static', path='logo.svg') }}" alt="PoB logo" class="h-12 w-12 rounded-xl border border-brand-200/80 bg-brand-600 object-cover dark:border-brand-400/20" />
+      <div class="min-w-0">
+        <a href="{{ passport.business_profile_url }}" class="font-display text-xl font-bold tracking-tight text-slate-950 transition hover:text-brand-700 dark:text-white dark:hover:text-brand-300">{{ passport.business_name }}</a>
+        <p class="text-sm text-slate-500 dark:text-slate-400">Proof of Business by Fladov</p>
+        <p class="text-xs font-medium uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">fladov.com/biz/{{ passport.business_slug }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <div class="relative">
+      <button
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200/80 bg-white/85 text-slate-700 transition hover:border-brand-200 hover:text-brand-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:border-brand-400/40 dark:hover:text-brand-200"
+        data-tab-menu
+        data-tab-menu-button
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="Open audience menu"
+        title="Open audience menu"
+      >
+        <svg class="h-4.5 w-4.5 text-slate-500 transition" data-tab-menu-icon viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M4 6.25A.75.75 0 0 1 4.75 5.5h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 6.25Zm0 3.75A.75.75 0 0 1 4.75 9.25h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 10ZM4.75 13.5a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H4.75Z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <div
+        class="absolute right-0 top-[calc(100%+0.75rem)] z-30 hidden w-72 rounded-xl border border-slate-200/80 bg-white/95 p-2 dark:border-white/10 dark:bg-slate-900/95"
+        data-tab-menu-panel
+      >
+        {% for tab in passport.tabs %}
+        <button
+          type="button"
+          class="block w-full rounded-lg px-3 py-3 text-left text-sm text-slate-600 transition hover:bg-brand-50 hover:text-brand-700 dark:text-slate-300 dark:hover:bg-brand-500/10 dark:hover:text-brand-200"
+          data-show-tab="{{ tab.key }}"
+          data-tab-title="{{ tab.title }}"
+        >
+          <span class="block text-sm font-semibold text-slate-900 dark:text-white">{{ tab.title }}</span>
+          <span class="mt-1 block text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{{ tab.main_score_label }}</span>
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200/80 bg-white/85 text-slate-600 transition hover:border-brand-200 hover:text-brand-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:border-brand-400/40 dark:hover:text-brand-200"
+      data-theme-toggle
+      aria-label="Toggle theme"
+      title="Toggle theme"
+    >
+      <span data-theme-icon aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<main class="flex-1 py-8 sm:py-10">
+  <section
+    class="mb-6 hidden items-start gap-4 rounded-xl border px-5 py-4"
+    data-payment-alert
+    role="status"
+    aria-live="polite"
+  ></section>
+
+  {% for tab in passport.tabs %}
+  {% set main_score = tab.main_score_presentation %}
+  {% if main_score.band_key == "high" %}
+    {% set score_color = "text-emerald-600 dark:text-emerald-300" %}
+    {% set score_badge = "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-500/10 dark:text-emerald-200" %}
+  {% elif main_score.band_key == "mid" %}
+    {% set score_color = "text-amber-600 dark:text-amber-300" %}
+    {% set score_badge = "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-500/10 dark:text-amber-200" %}
+  {% else %}
+    {% set score_color = "text-rose-600 dark:text-rose-300" %}
+    {% set score_badge = "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-200" %}
+  {% endif %}
+
+  {% if passport.confidence.level == "high" %}
+    {% set confidence_badge = "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-500/10 dark:text-emerald-200" %}
+  {% elif passport.confidence.level == "medium" %}
+    {% set confidence_badge = "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-500/10 dark:text-amber-200" %}
+  {% else %}
+    {% set confidence_badge = "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-200" %}
+  {% endif %}
+
+  {% if passport.payment.status == "succeeded" %}
+    {% set payment_badge = "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-500/10 dark:text-emerald-200" %}
+  {% elif passport.payment.status in ["failed", "cancelled", "canceled", "expired"] %}
+    {% set payment_badge = "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-200" %}
+  {% elif passport.payment.status == "pending" %}
+    {% set payment_badge = "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-500/10 dark:text-amber-200" %}
+  {% else %}
+    {% set payment_badge = "border-slate-200 bg-slate-50 text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300" %}
+  {% endif %}
+
+  <section class="space-y-5" data-tab-panel="{{ tab.key }}" {% if not tab.visible_by_default %}hidden{% endif %}>
+    <article class="overflow-hidden rounded-xl border border-slate-200/80 bg-white/95 dark:border-white/10 dark:bg-slate-900/85">
+      <div class="grid gap-8 px-6 py-6 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_320px] lg:items-start">
+        <div class="space-y-5">
+          <div class="space-y-3">
+            <p class="text-sm font-medium uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">{{ tab.main_score_label }}</p>
+            <div class="flex flex-wrap items-end gap-3">
+              <span class="font-display text-5xl font-bold tracking-tight {{ score_color }}">{{ "%.1f"|format(main_score.percent) }}%</span>
+              <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium {{ score_badge }}">{{ main_score.band_label }}</span>
+              <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium {{ confidence_badge }}">
+                Confidence {{ "%.1f"|format(passport.confidence.percent) }}% &middot; {{ passport.confidence.label }}
+              </span>
+            </div>
+            <p class="max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">{{ tab.summary }}</p>
+            <p class="max-w-3xl text-sm leading-7 text-slate-500 dark:text-slate-400">{{ tab.explanation }}</p>
+          </div>
+
+          <div class="rounded-xl border border-slate-200/80 bg-slate-50/80 px-4 py-3 dark:border-white/10 dark:bg-white/5">
+            <button
+              type="button"
+              class="flex w-full items-center justify-between gap-4 text-left"
+              data-subscore-toggle="{{ tab.key }}"
+              aria-expanded="false"
+            >
+              <div>
+                <p class="text-sm font-semibold text-slate-900 dark:text-white">Show contributing sub scores</p>
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Reveal the component scores that shaped this audience view.</p>
+              </div>
+              <svg class="h-5 w-5 flex-none text-slate-400 transition" data-subscore-icon="{{ tab.key }}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.51a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="mt-4 hidden" data-subscore-panel="{{ tab.key }}">
+              <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                {% for sub in tab.sub_scores %}
+                {% if sub.presentation.band_key == "high" %}
+                  {% set sub_tone = "border-emerald-200/80 bg-emerald-50/80 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-500/10 dark:text-emerald-200" %}
+                  {% set sub_value = "text-emerald-600 dark:text-emerald-300" %}
+                {% elif sub.presentation.band_key == "mid" %}
+                  {% set sub_tone = "border-amber-200/80 bg-amber-50/80 text-amber-700 dark:border-amber-400/20 dark:bg-amber-500/10 dark:text-amber-200" %}
+                  {% set sub_value = "text-amber-600 dark:text-amber-300" %}
+                {% else %}
+                  {% set sub_tone = "border-rose-200/80 bg-rose-50/80 text-rose-700 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-200" %}
+                  {% set sub_value = "text-rose-600 dark:text-rose-300" %}
+                {% endif %}
+                <article class="rounded-lg border p-4 {{ sub_tone }}">
+                  <div class="flex items-start justify-between gap-3">
+                    <p class="text-sm font-semibold">{{ sub.label }}</p>
+                    <span class="text-sm font-semibold {{ sub_value }}">{{ "%.1f"|format(sub.presentation.percent) }}%</span>
+                  </div>
+                  <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{{ sub.note }}</p>
+                </article>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="rounded-xl border border-slate-200/80 bg-slate-50/90 p-6 dark:border-white/10 dark:bg-white/5">
+          <div class="flex flex-col items-center gap-3 text-center">
+            <img src="{{ passport.business_avatar_url }}" alt="{{ passport.business_name }} avatar" class="mx-auto h-16 w-16 rounded-xl border border-slate-200 object-cover dark:border-white/10" loading="lazy" referrerpolicy="no-referrer" data-avatar-fallback="{{ business.avatar_placeholder_url }}" onerror="this.onerror=null;this.src=this.dataset.avatarFallback;" />
+            <div class="min-w-0">
+              <p class="text-xs font-medium uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">Business</p>
+              <a href="{{ passport.business_profile_url }}" class="mt-2 block truncate font-display text-2xl font-bold tracking-tight text-slate-950 transition hover:text-brand-700 dark:text-white dark:hover:text-brand-300">{{ passport.business_name }}</a>
+              <p class="mt-1 text-xs font-medium uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">fladov.com/biz/{{ passport.business_slug }}</p>
+            </div>
+          </div>
+
+          <p class="mt-5 text-sm leading-6 text-slate-500 dark:text-slate-400">This business is verified through Fladov activity.</p>
+
+          <dl class="mt-6 space-y-3 text-sm">
+            <div class="flex items-center justify-between gap-4">
+              <dt class="text-slate-500 dark:text-slate-400">Business slug</dt>
+              <dd class="font-medium text-slate-900 dark:text-white">{{ passport.business_slug }}</dd>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <dt class="text-slate-500 dark:text-slate-400">Category</dt>
+              <dd class="font-medium text-slate-900 dark:text-white">{{ passport.business_primary_category or "Fladov business" }}</dd>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <dt class="text-slate-500 dark:text-slate-400">Profile</dt>
+              <dd class="text-right">
+                <a
+                  href="{{ passport.business_profile_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 font-medium text-brand-700 transition hover:text-brand-600 dark:text-brand-300 dark:hover:text-brand-200"
+                >
+                  <span>View Fladov profile page</span>
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M11 3a1 1 0 1 0 0 2h2.586L8.293 10.293a1 1 0 0 0 1.414 1.414L15 6.414V9a1 1 0 1 0 2 0V3h-6Z"></path>
+                    <path d="M5 5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2a1 1 0 1 0-2 0v2H5V7h2a1 1 0 0 0 0-2H5Z"></path>
+                  </svg>
+                </a>
+              </dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </article>
+
+    <article id="payment-panel" class="overflow-hidden rounded-xl border border-slate-200/80 bg-white/95 dark:border-white/10 dark:bg-slate-900/85" data-payment-section {% if scroll_to_payment %}data-scroll-into-view="true"{% endif %}>
+      <div class="grid gap-6 px-6 py-6 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(340px,420px)] lg:items-center">
+        <div class="space-y-3 lg:self-center lg:max-w-xl">
+          <img src="{{ request.url_for('static', path='logo.svg') }}" alt="PoB logo" class="h-12 w-12 rounded-xl border border-brand-200/80 bg-brand-600 object-cover dark:border-brand-400/20" />
+          <h2 class="font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-white">{% if passport.selected_invoice %}Pay this invoice{% else %}Make a payment{% endif %}</h2>
+          <p class="max-w-2xl text-sm leading-7 text-slate-500 dark:text-slate-400">
+            Review this business's Fladov credibility passport before paying. Squad handles the verified payment flow and the result strengthens the evidence trail.
+          </p>
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ passport.payment.status_message }}</p>
+          {% if passport.selected_invoice %}
+          <div class="pt-2">
+            {{ passport.selected_invoice.preview_html | safe }}
+          </div>
+          {% endif %}
+        </div>
+
+        <form
+          class="grid gap-3 rounded-xl border border-slate-200/80 bg-slate-50/90 p-4 dark:border-white/10 dark:bg-white/5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
+          data-payment-form
+          data-report-business-slug="{{ passport.business_slug }}"
+          data-report-business-name="{{ passport.business_name }}"
+          data-report-theme="{{ passport.theme }}"
+          data-payment-status="{{ passport.payment.status }}"
+          data-payment-return-url="{{ settings.public_base_url }}/passport/{{ passport.business_slug }}?theme={{ passport.theme }}{% if pay_invoice %}&pay_invoice={{ pay_invoice }}{% endif %}"
+          {% if passport.selected_invoice %}data-report-invoice-id="{{ passport.selected_invoice.id }}"{% endif %}
+        >
+          <label class="space-y-2">
+            <span class="text-sm font-medium text-slate-700 dark:text-slate-200">Amount</span>
+            <input
+              name="amount"
+              type="number"
+              min="1"
+              step="0.1"
+              value="{{ prefill_amount if prefill_amount is not none else passport.payment.amount }}"
+              class="block w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-white/10 dark:bg-slate-950/40 dark:text-white {% if passport.selected_invoice %}cursor-not-allowed bg-slate-100/80 dark:bg-slate-900/60{% endif %}"
+              {% if passport.selected_invoice %}readonly{% endif %}
+            />
+            {% if passport.selected_invoice %}
+            <p class="text-xs text-slate-500 dark:text-slate-400">This amount is locked to the selected invoice total.</p>
+            {% endif %}
+          </label>
+          <label class="space-y-2">
+            <span class="text-sm font-medium text-slate-700 dark:text-slate-200">Note</span>
+            <input
+              name="note"
+              type="text"
+              placeholder="Optional payment note"
+              class="block w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-white/10 dark:bg-slate-950/40 dark:text-white dark:placeholder:text-slate-500"
+            />
+          </label>
+          <div class="sm:col-span-2 lg:col-span-1 xl:col-span-2">
+            <button
+              class="inline-flex w-full items-center justify-center rounded-xl bg-brand-600 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+              type="submit"
+            >
+              {{ passport.payment.cta_label }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </article>
+
+    <section class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <article class="rounded-xl border border-slate-200/80 bg-white/95 p-6 dark:border-white/10 dark:bg-slate-900/85">
+        <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">Key drivers</p>
+        <h2 class="mt-3 font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-white">{{ tab.main_score_label }}</h2>
+        <ul class="mt-4 space-y-3">
+          {% for point in tab.highlights %}
+          <li class="flex gap-3 rounded-lg border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
+            <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-brand-500"></span>
+            <span>{{ point }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </article>
+
+      <article class="rounded-xl border border-slate-200/80 bg-white/95 p-6 dark:border-white/10 dark:bg-slate-900/85">
+        <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">Risk notes</p>
+        {% if tab.risk_notes %}
+        <ul class="mt-4 space-y-3">
+          {% for note in tab.risk_notes %}
+          <li class="rounded-lg border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300">{{ note }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="mt-4 text-sm leading-7 text-slate-500 dark:text-slate-400">No notable risk flags surfaced for this audience view.</p>
+        {% endif %}
+      </article>
+    </section>
+
+    <article class="rounded-xl border border-slate-200/80 bg-white/95 p-6 dark:border-white/10 dark:bg-slate-900/85">
+      <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">Where this passport can improve</p>
+      <h2 class="mt-3 font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-white">Weak spots to tighten</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-7 text-slate-500 dark:text-slate-400">These are the clearest ways this Fladov business could raise the current audience score.</p>
+      {% if tab.improvement_notes %}
+      <ul class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {% for note in tab.improvement_notes %}
+        <li class="rounded-lg border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300">{{ note }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="mt-4 text-sm leading-7 text-slate-500 dark:text-slate-400">No obvious weak spots surfaced for this tab right now.</p>
+      {% endif %}
+    </article>
+  </section>
+  {% endfor %}
+</main>
+{% endblock %}

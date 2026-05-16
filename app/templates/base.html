@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title if title else settings.app_name }}</title>
+    <link rel="icon" type="image/svg+xml" href="{{ request.url_for('static', path='logo.svg') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+    <script>
+      (() => {
+        const saved = localStorage.getItem("pob-theme");
+        const initial = saved || "{{ theme if theme else 'light' }}";
+        document.documentElement.classList.toggle("dark", initial === "dark");
+        document.documentElement.dataset.theme = initial;
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+              display: ["Plus Jakarta Sans", "Inter", "system-ui", "sans-serif"],
+            },
+            colors: {
+              brand: {
+                50: "#f0fdfa",
+                100: "#ccfbf1",
+                200: "#99f6e4",
+                300: "#5eead4",
+                400: "#2dd4bf",
+                500: "#14b8a6",
+                600: "#0f9488",
+                700: "#0f766e",
+                800: "#115e59",
+                900: "#134e4a",
+              },
+            },
+            boxShadow: {
+              soft: "none",
+              float: "none",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+      }
+
+      .page-grid {
+        background-image:
+          radial-gradient(circle at top left, rgba(20, 184, 166, 0.09), transparent 24rem),
+          radial-gradient(circle at bottom right, rgba(15, 118, 110, 0.08), transparent 20rem);
+      }
+
+      .dark .page-grid {
+        background-image:
+          radial-gradient(circle at top left, rgba(45, 212, 191, 0.11), transparent 24rem),
+          radial-gradient(circle at bottom right, rgba(15, 118, 110, 0.14), transparent 22rem);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+    <script defer src="/static/app.js?v=20260514c"></script>
+  </head>
+  <body
+    class="min-h-full bg-slate-50 text-slate-950 antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-50"
+    data-api-prefix="{{ settings.api_route_prefix }}"
+  >
+    <div class="page-grid min-h-screen">
+      <div class="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8">
+      {% block content %}{% endblock %}
+      </div>
+    </div>
+  </body>
+</html>

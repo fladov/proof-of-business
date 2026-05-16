@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="flex items-center justify-between border-b border-slate-200/70 py-4 dark:border-white/10">
+  <a href="/" class="flex items-center gap-3">
+    <img src="{{ request.url_for('static', path='logo.svg') }}" alt="PoB logo" class="h-10 w-10 rounded-xl border border-brand-200/80 bg-brand-600 object-cover dark:border-brand-400/20" />
+    <div>
+      <p class="font-display text-lg font-bold tracking-tight text-slate-950 dark:text-white">Proof of Business by Fladov</p>
+      <p class="text-sm text-slate-500 dark:text-slate-400">Turn Fladov activity into a public credibility passport</p>
+    </div>
+  </a>
+  <button
+    type="button"
+    class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200/80 bg-white/80 text-slate-600 transition hover:border-brand-200 hover:text-brand-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:border-brand-400/40 dark:hover:text-brand-300"
+    data-theme-toggle
+    aria-label="Toggle theme"
+    title="Toggle theme"
+  >
+    <span data-theme-icon aria-hidden="true"></span>
+  </button>
+</header>
+
+<main class="flex flex-1 items-center py-10 sm:py-14">
+  <div class="grid w-full gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(400px,480px)] lg:items-start">
+    <section class="space-y-7">
+      <div class="inline-flex items-center gap-2 rounded-lg border border-brand-200/70 bg-brand-50 px-4 py-2 text-sm font-medium text-brand-700 dark:border-brand-400/20 dark:bg-brand-500/10 dark:text-brand-200">
+        <img src="{{ request.url_for('static', path='logo.svg') }}" alt="" aria-hidden="true" class="h-5 w-5 rounded-md object-cover" />
+        <span class="inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
+        Fladov-native credibility passports
+      </div>
+
+      <div class="max-w-3xl space-y-5">
+        <h1 class="font-display text-4xl font-bold leading-tight tracking-tight text-slate-950 sm:text-5xl dark:text-white">
+          Proof of Business by Fladov helps real businesses prove credibility from the activity they already record on Fladov.
+        </h1>
+        <p class="max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+          PoB analyzes Fladov records such as orders, purchases, cashbook entries, transaction documents, operation logs, reviews, and verified payments to generate privacy-safe credibility scores.
+        </p>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-3">
+        <article class="rounded-xl border border-slate-200/80 bg-white/90 p-5 dark:border-white/10 dark:bg-white/5">
+          <p class="text-sm font-semibold text-slate-900 dark:text-white">Fladov-native</p>
+          <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">Built for businesses already operating on Fladov.</p>
+        </article>
+        <article class="rounded-xl border border-slate-200/80 bg-white/90 p-5 dark:border-white/10 dark:bg-white/5">
+          <p class="text-sm font-semibold text-slate-900 dark:text-white">Customer, investor, lender views</p>
+          <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">Each audience gets a focused explanation and score breakdown.</p>
+        </article>
+        <article class="rounded-xl border border-slate-200/80 bg-white/90 p-5 dark:border-white/10 dark:bg-white/5">
+          <p class="text-sm font-semibold text-slate-900 dark:text-white">Squad-backed payments</p>
+          <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">Verified payment evidence strengthens the passport over time.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200/80 bg-white/95 p-6 dark:border-white/10 dark:bg-slate-900/85 sm:p-7">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div class="space-y-2">
+          <p class="text-sm font-semibold uppercase tracking-[0.24em] text-brand-700 dark:text-brand-300">Search Fladov businesses</p>
+          <h2 class="font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-white">Open a passport by name</h2>
+          <p class="max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
+            Start typing to search the Fladov catalog. Results stay capped at 10 at a time so the list stays fast and readable.
+          </p>
+        </div>
+        <div class="rounded-full border border-brand-200/80 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-800 dark:border-brand-400/20 dark:bg-brand-500/10 dark:text-brand-200">
+          {{ "{:,}".format(enabled_business_count) }} PoB enabled businesses
+        </div>
+      </div>
+
+      <label class="mt-7 block space-y-2">
+        <span class="text-sm font-medium text-slate-700 dark:text-slate-200">Search businesses</span>
+        <div class="relative">
+          <input
+            type="search"
+            placeholder="Search Sade's Cakes, Glow Salon, Quick Mart..."
+            autocomplete="off"
+            spellcheck="false"
+            class="block w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3.5 pr-11 text-sm text-slate-900 transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-slate-500"
+            data-fladov-search-input
+          />
+          <svg class="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 dark:text-slate-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8.5 3a5.5 5.5 0 1 0 3.672 9.57l3.629 3.63a.75.75 0 1 0 1.06-1.06l-3.63-3.629A5.5 5.5 0 0 0 8.5 3Zm-4 5.5a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </label>
+
+      <div class="mt-5 flex items-center justify-between gap-3">
+        <p class="text-xs font-medium uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">Live results</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400" data-fladov-search-status>Start typing to search</p>
+      </div>
+
+      <div class="mt-4 grid gap-3" data-fladov-search-results></div>
+    </section>
+  </div>
+</main>
+{% endblock %}
